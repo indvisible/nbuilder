@@ -17,7 +17,7 @@ namespace FizzWare.NBuilder
 
         private static List<PropertyInfo> disabledAutoNameProperties;
 
-        internal static bool HasDisabledAutoNameProperties;
+        public static bool HasDisabledAutoNameProperties;
 
         static BuilderSetup()
         {

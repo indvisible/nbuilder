@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzWare.NBuilder.Tests", "FizzWare.NBuilder.Tests\FizzWare.NBuilder.Tests.csproj", "{19C2A470-C015-46B7-84A1-B8F6895795B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzWare.NBuilder.FunctionalTests", "FizzWare.NBuilder.FunctionalTests\FizzWare.NBuilder.FunctionalTests.csproj", "{AE67FEEE-07B1-4B32-A11A-E696E6CCE877}"
@@ -8,6 +8,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzWare.NBuilder.FunctionalTests.Model", "FizzWare.FunctionalTests.Model\FizzWare.NBuilder.FunctionalTests.Model.csproj", "{201FC511-5E98-4321-9595-E0653F9BB73B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzWare.NBuilder-NET4.0", "FizzWare.NBuilder\FizzWare.NBuilder-NET4.0.csproj", "{2A91787B-AFB7-4A4C-A5D5-836F578F2DB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indvisible.DataGen", "Indvisible.DataGen\Indvisible.DataGen.csproj", "{ABA046CB-B3C5-4E25-856B-296312EAE192}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indvisible.RealisticData", "Indvisible.RealisticData\Indvisible.RealisticData.csproj", "{D834F4BF-68CD-43B9-A8A8-8D7A814D03E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indvisible.RealisticData.Tests", "Indvisible.RealisticData.Tests\Indvisible.RealisticData.Tests.csproj", "{E00BC240-87ED-416B-9B2E-10C33D9AF17A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +37,18 @@ Global
 		{2A91787B-AFB7-4A4C-A5D5-836F578F2DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A91787B-AFB7-4A4C-A5D5-836F578F2DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A91787B-AFB7-4A4C-A5D5-836F578F2DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA046CB-B3C5-4E25-856B-296312EAE192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA046CB-B3C5-4E25-856B-296312EAE192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA046CB-B3C5-4E25-856B-296312EAE192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA046CB-B3C5-4E25-856B-296312EAE192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D834F4BF-68CD-43B9-A8A8-8D7A814D03E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D834F4BF-68CD-43B9-A8A8-8D7A814D03E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D834F4BF-68CD-43B9-A8A8-8D7A814D03E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D834F4BF-68CD-43B9-A8A8-8D7A814D03E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00BC240-87ED-416B-9B2E-10C33D9AF17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00BC240-87ED-416B-9B2E-10C33D9AF17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00BC240-87ED-416B-9B2E-10C33D9AF17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00BC240-87ED-416B-9B2E-10C33D9AF17A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
