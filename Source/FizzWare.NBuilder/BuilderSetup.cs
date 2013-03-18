@@ -66,12 +66,12 @@ namespace FizzWare.NBuilder
 
         public static IPropertyNamer GetPropertyNamerFor<T>()
         {
-            if (!propertyNamers.ContainsKey(typeof(T)))
+            if (propertyNamers.ContainsKey(typeof(T)))
             {
-                return defaultPropertyNamer;
+                return propertyNamers[typeof(T)];
             }
 
-            return propertyNamers[typeof (T)];
+            return defaultPropertyNamer;
         }
 
         public static void DisablePropertyNamingFor<T, TFunc>(Expression<Func<T, TFunc>> func)
@@ -90,8 +90,7 @@ namespace FizzWare.NBuilder
 
         private static PropertyInfo GetProperty<TModel, T>(Expression<Func<TModel, T>> expression)
         {
-            MemberExpression memberExpression = GetMemberExpression(expression);
-
+            var memberExpression = GetMemberExpression(expression);
             return (PropertyInfo)memberExpression.Member;
         }
 
@@ -104,6 +103,16 @@ namespace FizzWare.NBuilder
             }
 
             return memberExpression;
+        }
+
+        public static IPropertyNamer GetPropertyNamerFor(Type type)
+        {
+            if (propertyNamers.ContainsKey(type))
+            {
+                return propertyNamers[type];
+            }
+
+            return defaultPropertyNamer;
         }
     }
 }

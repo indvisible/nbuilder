@@ -6,6 +6,5 @@ namespace FizzWare.NBuilder.PropertyNaming
     {
         void SetValuesOfAllIn<T>(IList<T> obj);
         void SetValuesOf<T>(T obj);
-        //void SetValuesOf<T>(T obj, int sequenceNumber, string sequenceIdentifier);
     }
 }
