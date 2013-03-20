@@ -2,7 +2,7 @@ namespace Indvisible.DataGen.Models
 {
     using System.Collections.Generic;
 
-    public class SimpleModelWithNested
+    public class ModelWithNested
     {
         public int Id { get; set; }
 
@@ -10,6 +10,6 @@ namespace Indvisible.DataGen.Models
 
         public string Tags { get; set; }
 
-        public SimpleModelWithName SimpleModel { get; set; }
+        public ModelWithName Model { get; set; }
     }
 }

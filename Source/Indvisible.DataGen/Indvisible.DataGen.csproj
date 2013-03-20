@@ -44,9 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataGenTests.cs" />
+    <Compile Include="Models\HierarhicalModel.cs" />
+    <Compile Include="Models\ModelWithDeep2.cs" />
+    <Compile Include="Models\ModelWithDeep3.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="RealisticPropertyNamer.cs" />
-    <Compile Include="Models\SimpleModelWithName.cs" />
-    <Compile Include="Models\SimpleModelWithNested.cs" />
+    <Compile Include="Models\ModelWithName.cs" />
+    <Compile Include="Models\ModelWithNested.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

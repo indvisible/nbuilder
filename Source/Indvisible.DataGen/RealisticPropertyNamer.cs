@@ -10,6 +10,7 @@ namespace Indvisible.DataGen
     using System.Reflection;
 
     using FizzWare.NBuilder;
+    using FizzWare.NBuilder.Implementation;
     using FizzWare.NBuilder.PropertyNaming;
 
     using Indvisible.NBuilder;
@@ -27,9 +28,12 @@ namespace Indvisible.DataGen
         public RealisticPropertyNamer()
         {
             _reflectionUtil = Activator.CreateInstance<ReflectionUtil>();
+            _random = new Random();
         }
 
         private int _sequenceNumber;
+
+        private Random _random;
 
         public void SetValuesOfAllIn<T>(IList<T> objects)
         {
@@ -529,6 +533,14 @@ namespace Indvisible.DataGen
 
         protected DateTime GetDateTime(MemberInfo memberInfo)
         {
+            if (BuilderSetup.DateFromRestriction.HasValue)
+            {
+                var start = BuilderSetup.DateFromRestriction.Value;
+
+                var range = (int)(DateTime.Today - start).TotalDays;
+                return start.AddDays(_random.Next(range));
+            }
+            
             return DateTime.Now.Date.AddDays(_sequenceNumber - 1);
         }
 
@@ -640,6 +652,4 @@ namespace Indvisible.DataGen
             return null;
         }
     }
-
-
 }

@@ -1,6 +1,6 @@
 ﻿namespace Indvisible.DataGen.Models
 {
-    public class SimpleModelWithName
+    public class ModelWithName
     {
         public int Id { get; set; }
 

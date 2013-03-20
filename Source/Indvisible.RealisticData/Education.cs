@@ -1,8 +1,9 @@
-﻿using System;
-using Indvisible.RealisticData.Extensions;
-
-namespace Indvisible.RealisticData
+﻿namespace Indvisible.RealisticData
 {
+    using System;
+
+    using Indvisible.RealisticData.Extensions;
+
     public static class Education
     {
         public static string GetDegreeShort()

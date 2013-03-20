@@ -19,6 +19,9 @@ namespace FizzWare.NBuilder
 
         public static bool HasDisabledAutoNameProperties;
 
+        public static DateTime? DateFromRestriction;
+        public static DateTime? DateToRestriction;
+
         static BuilderSetup()
         {
             ResetToDefaults();
