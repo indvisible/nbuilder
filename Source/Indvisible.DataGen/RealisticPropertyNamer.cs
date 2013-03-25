@@ -345,7 +345,7 @@ namespace Indvisible.DataGen
             }
             else
             {
-                value = HandleUnknownType(type, memberInfo, obj);
+                value = handleUnknownType(memberInfo);
             }
 
             SetValue(memberInfo, obj, value);
@@ -437,7 +437,7 @@ namespace Indvisible.DataGen
             }
             else
             {
-                HandleUnknownType(type, memberInfo, obj);
+                value = handleUnknownType(memberInfo);
             }
 
             SetValue(memberInfo, obj, value);
@@ -540,7 +540,7 @@ namespace Indvisible.DataGen
                 var range = (int)(DateTime.Today - start).TotalDays;
                 return start.AddDays(_random.Next(range));
             }
-            
+
             return DateTime.Now.Date.AddDays(_sequenceNumber - 1);
         }
 
@@ -577,13 +577,13 @@ namespace Indvisible.DataGen
 
         protected bool GetBoolean(MemberInfo memberInfo)
         {
-            return (_sequenceNumber % 2) == 0 ? true : false;
+            return (_sequenceNumber % 2) == 0;
         }
 
         protected Enum GetEnum(MemberInfo memberInfo)
         {
             var enumType = GetMemberType(memberInfo);
-            var enumValues = GetEnumValues(enumType);
+            var enumValues = getEnumValues(enumType);
             var newSequenceNumber = GetNewSequenceNumber(_sequenceNumber, enumValues.Length);
             return Enum.Parse(enumType, enumValues.GetValue(newSequenceNumber - 1).ToString(), true) as Enum;
         }
@@ -601,13 +601,13 @@ namespace Indvisible.DataGen
             return new Guid(bytes);
         }
 
-        protected static Array GetEnumValues(Type enumType)
+        private static Array getEnumValues(Type enumType)
         {
             var enumArray = EnumHelper.GetValues(enumType);
             return enumArray;
         }
 
-        private dynamic HandleUnknownType(Type type, MemberInfo memberInfo, object o)
+        private dynamic handleUnknownType(MemberInfo memberInfo)
         {
             var propertyInfo = memberInfo as PropertyInfo;
             if (propertyInfo != null)
@@ -617,36 +617,44 @@ namespace Indvisible.DataGen
 
                 if (enumerableFlag)
                 {
-                    //var size = _randomGenerator.Next(1, 10);
+                    var size = _random.Next(10);
+                    var typeInCollection = propertyType.GetGenericArguments()[0];
+                    var constructor = typeof(List<>).MakeGenericType(typeInCollection).GetConstructor(new[] { typeof(int) });
+                    if (constructor != null)
+                    {
+                        dynamic list = constructor.Invoke(new object[] { size });
+                        var objectBuilder = BuilderNested.CreateNew(typeInCollection, this);
+                        for (var i = 0; i < size; i++)
+                        {
+                            list.Add(objectBuilder.Build());
+                        }
 
-                    //Type propertyType = propertyInfo.PropertyType;
+                        return list;
+                    }
 
-                    ////object obj123 = typeof(Builder<>).MakeGenericType(propertyType).GetMethod("CreateListOfSize", new[] { typeof(int) }).Invoke(null, new object[] { size });
+                    throw new BuilderException("Constructor is null");
 
-                    ////typeof(ListBuilder<>).MakeGenericType(propertyType).GetConstructor(BindingFlags.Public, null, )
-                    //// new ListBuilder<T>(size, propertyNamer, new ReflectionUtil());
-
-                    //var reflectionUtil = new ReflectionUtil();
-                    //var propertyNamer = new FakePropertyNamer(reflectionUtil);
-                    //var constructor = typeof(ListBuilder<>).MakeGenericType(propertyType).GetConstructor(new[] { typeof(int), typeof(IPropertyNamer), typeof(IReflectionUtil) });
-                    //if (constructor != null)
-                    //{
+                    // Type propertyType = propertyInfo.PropertyType;
+                    // object obj123 = typeof(Builder<>).MakeGenericType(propertyType).GetMethod("CreateListOfSize", new[] { typeof(int) }).Invoke(null, new object[] { size });
+                    // typeof(ListBuilder<>).MakeGenericType(propertyType).GetConstructor(BindingFlags.Public, null, )
+                    // new ListBuilder<T>(size, propertyNamer, new ReflectionUtil());
+                    // var reflectionUtil = new ReflectionUtil();
+                    // var propertyNamer = new FakePropertyNamer(reflectionUtil);
+                    // var constructor = typeof(ListBuilder<>).MakeGenericType(propertyType).GetConstructor(new[] { typeof(int), typeof(IPropertyNamer), typeof(IReflectionUtil) });
+                    //  
                     //    dynamic listBuilder = constructor.Invoke(new object[] { size, propertyNamer, reflectionUtil });
                     //    var result = listBuilder.Build();
                     //    //object result = listBuilder.GetType().GetMethod("Build").Invoke(null, null);
-
+                    //
                     //    //object fake = method.Invoke(null, new object[] { size });
-
                     //    //MethodInfo methodInfo = typeof(ListBuilder<>).MakeGenericType(propertyType).GetMethod("Build", BindingFlags.Public);
                     //    //object invoke = methodInfo.Invoke(null, null);
-
+                    //
                     //    return result;
-                    return null;
                 }
 
-                var build = BuilderNested.CreateNew(propertyType, new RealisticPropertyNamer()).Build(propertyType);
+                var build = BuilderNested.CreateNew(propertyType, this).Build();
                 return build;
-                //var list = Builder<>.CreateListOfSize(_randomGenerator.Next(1, 10)).Build();
             }
 
             return null;

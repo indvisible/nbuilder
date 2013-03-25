@@ -12,7 +12,7 @@ namespace FizzWare.NBuilder
             return new ObjectBuilder<T>(reflectionUtil).WithPropertyNamer(propertyNamer);
         }
 
-        public static ISingleObjectBuilder<T> CreateNewWithPropertyNamer(IPropertyNamer propertyNamer)
+        public static ISingleObjectBuilder<T> CreateNew(IPropertyNamer propertyNamer)
         {
             return new ObjectBuilder<T>(new ReflectionUtil()).WithPropertyNamer(propertyNamer);
         }
@@ -26,6 +26,7 @@ namespace FizzWare.NBuilder
 
         public static IListBuilder<T> CreateListOfSize(int size, IPropertyNamer propertyNamer)
         {
+            Guard.Against(size < 1, "Size of list must be 1 or greater");
             return new ListBuilder<T>(size, propertyNamer, new ReflectionUtil());
         }
     }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace FizzWare.NBuilder.Implementation
 {
-    class DeclarationComparer<T> : IComparer<IDeclaration<T>>
+    internal class DeclarationComparer<T> : IComparer<IDeclaration<T>>
     {
         public int Compare(IDeclaration<T> x, IDeclaration<T> y)
         {

@@ -27,13 +27,13 @@ namespace Indvisible.NBuilder
             return this;
         }
 
-        public object Build(Type type)
+        public object Build()
         {
-            var obj = Construct(type);
+            var obj = Construct(_type);
             Name(obj);
             return obj;
         }
-        
+
         public dynamic Construct(Type type)
         {
             if (type.IsInterface)
@@ -46,33 +46,16 @@ namespace Indvisible.NBuilder
                 throw new TypeCreationException("Cannot build an abstract class");
             }
 
-            object obj;
-
-            //var requiresArgs = _reflectionUtil.RequiresConstructorArgs(type);
-            //if (requiresArgs && constructorArgs != null)
-            //{
-            //    obj = _reflectionUtil.CreateInstanceOf(type, constructorArgs);
-            //}
-            //else if (constructorArgs != null)
-            //{
-            //    obj = _reflectionUtil.CreateInstanceOf(type, constructorArgs);
-            //}
-            //else
-            //{
-                obj = _reflectionUtil.CreateInstanceOf(type);
-            //}
-
+            var obj = _reflectionUtil.CreateInstanceOf(type);
             return obj;
         }
 
-        public dynamic Name(dynamic obj)
+        public void Name(dynamic obj)
         {
             if (BuilderSetup.AutoNameProperties)
             {
                 _propertyNamer.SetValuesOf(obj);
             }
-
-            return obj;
         }
     }
 }

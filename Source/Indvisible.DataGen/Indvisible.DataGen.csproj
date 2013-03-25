@@ -43,7 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataGenTests.cs" />
+    <Compile Include="ListBuilderTests.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Mail.cs" />
+    <Compile Include="Models\ModelWithNestedCollection.cs" />
+    <Compile Include="Models\ModelWithNestedEnumerable.cs" />
+    <Compile Include="Models\ModelWithNestedIList.cs" />
+    <Compile Include="SingleBuilderTests.cs" />
     <Compile Include="Models\HierarhicalModel.cs" />
     <Compile Include="Models\ModelWithDeep2.cs" />
     <Compile Include="Models\ModelWithDeep3.cs" />

@@ -35,6 +35,8 @@ namespace FizzWare.NBuilder
             propertyNamers = new Dictionary<Type, IPropertyNamer>();
             HasDisabledAutoNameProperties = false;
             disabledAutoNameProperties = new List<PropertyInfo>();
+            DateFromRestriction = null;
+            DateToRestriction = null;
         }
 
         public static void SetDefaultPropertyNamer(IPropertyNamer propertyNamer)

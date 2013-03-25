@@ -3,7 +3,7 @@ namespace Indvisible.DataGen.Models
     using System;
     using System.Collections.Generic;
 
-    class User
+    public class User
     {
         public int Id { get; set; }
 
@@ -11,7 +11,6 @@ namespace Indvisible.DataGen.Models
 
         public DateTime DateObirth { get; set; }
 
-        public ICollection<Mail> Mails { get; set; } 
-
+        public ICollection<Mail> Mails { get; set; }
     }
 }

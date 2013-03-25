@@ -1,33 +1,23 @@
 ﻿namespace Indvisible.DataGen
 {
     using System;
-    using System.Collections;
 
     using FizzWare.NBuilder;
-    using FizzWare.NBuilder.Implementation;
 
     using Indvisible.DataGen.Models;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class DataGenTests
+    public class SingleBuilderTests
     {
-        [Test]
-        public void Creation()
-        {
-            const int SIZE = 10;
-            var list = Builder<ModelWithName>.CreateListOfSize(SIZE, new RealisticPropertyNamer()).Build();
-
-            Assert.IsNotNull(list);
-            Assert.AreEqual(SIZE, list.Count);
-        }
 
         [Test]
         public void CreateWithRealisticNames()
         {
             const int SIZE = 10;
             var models = Builder<ModelWithName>.CreateListOfSize(SIZE, new RealisticPropertyNamer()).Build();
+
             foreach (var model in models)
             {
                 Assert.IsNotNull(model);
@@ -48,7 +38,7 @@
         [Test]
         public void CreateNestedEntities()
         {
-            var model = Builder<ModelWithNested>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var model = Builder<ModelWithNested>.CreateNew(new RealisticPropertyNamer()).Build();
 
             Assert.IsNotNull(model.Model);
         }
@@ -56,7 +46,7 @@
         [Test]
         public void CreateNestedEntitiesWithNotNullProperties()
         {
-            var model = Builder<ModelWithNested>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var model = Builder<ModelWithNested>.CreateNew(new RealisticPropertyNamer()).Build();
 
             Assert.IsNotNull(model.Model);
             Assert.IsNotNull(model.Model.Id);
@@ -66,7 +56,7 @@
         [Test]
         public void CreateModelWithNestedElementsDeep2()
         {
-            var model = Builder<ModelWithDeep2>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var model = Builder<ModelWithDeep2>.CreateNew(new RealisticPropertyNamer()).Build();
 
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.ModelWithNested);
@@ -76,7 +66,7 @@
         [Test]
         public void CreateModelWithNestedElementsDeep3()
         {
-            var model = Builder<ModelWithDeep3>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var model = Builder<ModelWithDeep3>.CreateNew(new RealisticPropertyNamer()).Build();
 
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.ModelWithDeep2);
@@ -84,20 +74,20 @@
             Assert.IsNotNull(model.ModelWithDeep2.ModelWithNested.Model);
         }
 
-        [Test]
+        //[Test]
         public void TestHierarhicalModel()
         {
-            var model = Builder<HierarhicalModel>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var model = Builder<HierarhicalModel>.CreateNew(new RealisticPropertyNamer()).Build();
             Assert.DoesNotThrow(() => new StackOverflowException());
         }
 
         [Test]
         public void CreateWithDates()
         {
-            var user = Builder<User>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+            var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
             
             Assert.IsNotNull(user);
-            Assert.IsNotNull(user.DateObirth);
+            Assert.IsNotNull(user.DateBirth);
         }
 
         [Test]
@@ -105,23 +95,15 @@
         {
             var dateTime = new DateTime(2010, 1, 1);
             BuilderSetup.DateFromRestriction = dateTime;
-            for (int i = 0; i < 100; i++)
+            
+            for (var i = 0; i < 100; i++)
             {
-                var user = Builder<User>.CreateNewWithPropertyNamer(new RealisticPropertyNamer()).Build();
+                var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
 
                 Assert.IsNotNull(user);
-                Assert.IsNotNull(user.DateObirth);
-                Assert.IsTrue(user.DateObirth > dateTime);
+                Assert.IsNotNull(user.DateBirth);
+                Assert.IsTrue(user.DateBirth > dateTime);
             }
         }
-    }
-
-    class Mail
-    {
-        public User Sender { get; set; }
-
-        public User Receiver { get; set; }
-
-        public string MailText { get; set; }
     }
 }

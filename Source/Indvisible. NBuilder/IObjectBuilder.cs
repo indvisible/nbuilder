@@ -13,6 +13,6 @@ namespace Indvisible.NBuilder
 
         dynamic Construct(Type type);
 
-        dynamic Name(dynamic obj);
+        void Name(dynamic obj);
     }
 }
