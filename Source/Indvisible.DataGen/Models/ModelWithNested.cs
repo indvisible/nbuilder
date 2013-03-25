@@ -1,7 +1,5 @@
 namespace Indvisible.DataGen.Models
 {
-    using System.Collections.Generic;
-
     public class ModelWithNested
     {
         public int Id { get; set; }

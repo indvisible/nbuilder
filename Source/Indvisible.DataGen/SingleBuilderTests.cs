@@ -14,8 +14,7 @@
         [SetUp]
         public void Setup()
         {
-            BuilderSetup.DateFromRestriction = null;
-            BuilderSetup.DateToRestriction = null;
+            BuilderSetup.ResetToDefaults();
         }
 
         [Test]
@@ -80,7 +79,7 @@
             Assert.IsNotNull(model.ModelWithDeep2.ModelWithNested.Model);
         }
 
-        //[Test]
+        [Test]
         public void TestHierarhicalModel()
         {
             var model = Builder<HierarhicalModel>.CreateNew(new RealisticPropertyNamer()).Build();
@@ -148,5 +147,33 @@
                 Assert.IsTrue(user.DateBirth < dateToRestriction);
             }
         }
+
+        [Test]
+        public void Build_WithProperties_WhichHasTheSameType_ButDifferentNames()
+        {
+            var mail = Builder<Mail>.CreateNew(new RealisticPropertyNamer()).Build();
+
+            Assert.IsNotNull(mail);
+            Assert.IsNotNull(mail.Receiver);
+            Assert.IsNotNull(mail.Sender);
+
+            Assert.That(mail.Sender.FirstName != mail.Receiver.FirstName);
+        }
+
+
+        [Test]
+        public void Build_WithCrossReferences()
+        {
+            var mail = Builder<Mail>.CreateNew(new RealisticPropertyNamer()).Build();
+
+            Assert.IsNotNull(mail);
+            Assert.IsNotNull(mail.Receiver);
+            Assert.IsNotNull(mail.Sender);
+
+            Assert.IsNull(mail.Sender.Mails);
+            Assert.IsNull(mail.Receiver.Mails);
+        }
+
+
     }
 }

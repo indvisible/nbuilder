@@ -13,8 +13,6 @@ namespace Indvisible.NBuilder
 
         private IPropertyNamer _propertyNamer;
 
-        private object[] constructorArgs;
-
         public ObjectBuilder(Type type, IReflectionUtil reflectionUtil)
         {
             _type = type;
@@ -29,6 +27,13 @@ namespace Indvisible.NBuilder
 
         public object Build()
         {
+            if (BuilderSetup.ClassesChain.ContainsKey(_type))
+            {
+                return null;
+            }
+
+            BuilderSetup.ClassesChain.Add(_type, "node");
+
             var obj = Construct(_type);
             Name(obj);
             return obj;

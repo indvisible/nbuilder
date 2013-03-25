@@ -33,33 +33,13 @@ namespace Indvisible.DataGen
 
         private int _sequenceNumber;
 
-        private Random _random;
+        private readonly Random _random;
 
         public void SetValuesOfAllIn<T>(IList<T> objects)
         {
             _sequenceNumber = 1;
 
             var type = typeof(T);
-
-            foreach (var obj in objects)
-            {
-                foreach (var propertyInfo in type.GetProperties(FLAGS).Where(p => p.CanWrite))
-                {
-                    SetMemberValue(propertyInfo, obj);
-                }
-
-                foreach (var fieldInfo in type.GetFields().Where(f => !f.IsLiteral))
-                {
-                    SetMemberValue(fieldInfo, obj);
-                }
-
-                _sequenceNumber++;
-            }
-        }
-
-        public void SetValuesOfAllIn(Type type, IEnumerable<dynamic> objects)
-        {
-            _sequenceNumber = 1;
 
             foreach (var obj in objects)
             {
@@ -92,50 +72,7 @@ namespace Indvisible.DataGen
             }
         }
 
-
-        public virtual void SetValuesOf(Type type, object obj)
-        {
-            foreach (var propertyInfo in type.GetProperties(FLAGS).Where(p => p.CanWrite))
-            {
-                SetMemberValue(propertyInfo, obj);
-            }
-
-            foreach (var propertyInfo in type.GetFields().Where(f => !f.IsLiteral))
-            {
-                SetMemberValue(propertyInfo, obj);
-            }
-        }
-
         protected static object GetCurrentValue<T>(MemberInfo memberInfo, T obj)
-        {
-            object currentValue = null;
-
-            var fieldInfo = memberInfo as FieldInfo;
-            if (fieldInfo != null)
-            {
-                currentValue = fieldInfo.GetValue(obj);
-            }
-
-            var propertyInfo = memberInfo as PropertyInfo;
-            if (propertyInfo != null)
-            {
-                try
-                {
-                    if (propertyInfo.GetGetMethod() != null)
-                    {
-                        currentValue = propertyInfo.GetValue(obj, null);
-                    }
-                }
-                catch (Exception)
-                {
-                    Trace.WriteLine(string.Format("NBuilder warning: {0} threw an exception when attempting to read its current value", memberInfo.Name));
-                }
-            }
-
-            return currentValue;
-        }
-
-        protected static object GetCurrentValue(Type type, MemberInfo memberInfo, object obj)
         {
             object currentValue = null;
 
@@ -189,31 +126,6 @@ namespace Indvisible.DataGen
         }
 
         protected void SetValue<T>(MemberInfo memberInfo, T obj, object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-
-            var fieldInfo = memberInfo as FieldInfo;
-            if (fieldInfo != null)
-            {
-                fieldInfo.SetValue(obj, value);
-            }
-
-            var propertyInfo = memberInfo as PropertyInfo;
-            if (propertyInfo == null)
-            {
-                return;
-            }
-
-            if (propertyInfo.CanWrite)
-            {
-                propertyInfo.SetValue(obj, value, null);
-            }
-        }
-
-        protected void SetValue(Type type, MemberInfo memberInfo, object obj, object value)
         {
             if (value == null)
             {
@@ -351,98 +263,6 @@ namespace Indvisible.DataGen
             SetValue(memberInfo, obj, value);
         }
 
-        protected void SetMemberValue(Type type, MemberInfo memberInfo, object obj)
-        {
-            if (ShouldIgnore(memberInfo))
-            {
-                return;
-            }
-
-            var currentValue = GetCurrentValue(memberInfo, obj);
-
-            if (!_reflectionUtil.IsDefaultValue(currentValue))
-            {
-                return;
-            }
-
-            object value = null;
-
-            if (type == typeof(short))
-            {
-                value = GetInt16(memberInfo);
-            }
-            else if (type == typeof(int))
-            {
-                value = GetInt32(memberInfo);
-            }
-            else if (type == typeof(long))
-            {
-                value = GetInt64(memberInfo);
-            }
-            else if (type == typeof(decimal))
-            {
-                value = GetDecimal(memberInfo);
-            }
-            else if (type == typeof(float))
-            {
-                value = GetSingle(memberInfo);
-            }
-            else if (type == typeof(double))
-            {
-                value = GetDouble(memberInfo);
-            }
-            else if (type == typeof(ushort))
-            {
-                value = GetUInt16(memberInfo);
-            }
-            else if (type == typeof(uint))
-            {
-                value = GetUInt32(memberInfo);
-            }
-            else if (type == typeof(ulong))
-            {
-                value = GetUInt64(memberInfo);
-            }
-            else if (type == typeof(char))
-            {
-                value = GetChar(memberInfo);
-            }
-            else if (type == typeof(byte))
-            {
-                value = GetByte(memberInfo);
-            }
-            else if (type == typeof(sbyte))
-            {
-                value = GetSByte(memberInfo);
-            }
-            else if (type == typeof(DateTime))
-            {
-                value = GetDateTime(memberInfo);
-            }
-            else if (type == typeof(string))
-            {
-                value = GetString(memberInfo);
-            }
-            else if (type == typeof(bool))
-            {
-                value = GetBoolean(memberInfo);
-            }
-            else if (type.BaseType == typeof(Enum))
-            {
-                value = GetEnum(memberInfo);
-            }
-            else if (type == typeof(Guid))
-            {
-                value = GetGuid(memberInfo);
-            }
-            else
-            {
-                value = handleUnknownType(memberInfo);
-            }
-
-            SetValue(memberInfo, obj, value);
-        }
-
         /// <summary>
         /// Gets the new sequence number taking into account a maximum value.
         /// 
@@ -472,7 +292,7 @@ namespace Indvisible.DataGen
 
         protected int GetInt32(MemberInfo memberInfo)
         {
-            return _sequenceNumber;
+            return _random.Next(100);
         }
 
         protected long GetInt64(MemberInfo memberInfo)
@@ -492,7 +312,7 @@ namespace Indvisible.DataGen
 
         protected double GetDouble(MemberInfo memberInfo)
         {
-            return Convert.ToDouble(_sequenceNumber);
+            return _random.NextDouble() * _random.Next(100);
         }
 
         protected ushort GetUInt16(MemberInfo memberInfo)
@@ -534,7 +354,7 @@ namespace Indvisible.DataGen
         protected DateTime GetDateTime(MemberInfo memberInfo)
         {
             var start = new DateTime(1900, 1, 1);
-            var end = DateTime.MaxValue;
+            var end = DateTime.Now;
             if (BuilderSetup.DateFromRestriction.HasValue)
             {
                 start = BuilderSetup.DateFromRestriction.Value;
@@ -545,22 +365,15 @@ namespace Indvisible.DataGen
                 end = BuilderSetup.DateToRestriction.Value.AddDays(-1);
             }
 
-            var range = (int)(end - start).TotalDays;
-            if (range < 0)
+            if (start.Date == end.Date)
             {
-                throw new ArgumentOutOfRangeException(string.Format("Current range value: {0}", range));
+                return start;
             }
 
-            var value = _random.Next(range);
-            var dateTime = start.AddDays(value);
-            if (dateTime >= BuilderSetup.DateToRestriction)
-            {
-                throw  new ArgumentOutOfRangeException(string.Format("Restriction: {0}, currentValue: {1}", BuilderSetup.DateToRestriction, dateTime));
-            }
+            var range = (int)(end - start).TotalDays;
+            var dateTime = start.AddDays(_random.Next(range));
 
             return dateTime;
-
-            return DateTime.Now.Date.AddDays(_sequenceNumber - 1);
         }
 
         protected string GetString(MemberInfo memberInfo)
@@ -638,6 +451,11 @@ namespace Indvisible.DataGen
                 {
                     var size = _random.Next(10);
                     var typeInCollection = propertyType.GetGenericArguments()[0];
+                    if (BuilderSetup.ClassesChain.ContainsKey(typeInCollection))
+                    {
+                        return null;
+                    }
+
                     var constructor = typeof(List<>).MakeGenericType(typeInCollection).GetConstructor(new[] { typeof(int) });
                     if (constructor != null)
                     {
@@ -646,6 +464,7 @@ namespace Indvisible.DataGen
                         for (var i = 0; i < size; i++)
                         {
                             list.Add(objectBuilder.Build());
+                            BuilderSetup.ClassesChain.Remove(typeInCollection);
                         }
 
                         return list;
@@ -673,6 +492,7 @@ namespace Indvisible.DataGen
                 }
 
                 var build = BuilderNested.CreateNew(propertyType, this).Build();
+                BuilderSetup.ClassesChain.Remove(propertyType);
                 return build;
             }
 

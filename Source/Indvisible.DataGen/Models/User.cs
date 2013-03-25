@@ -7,10 +7,12 @@ namespace Indvisible.DataGen.Models
     {
         public int Id { get; set; }
 
+        public string FirstName { get; set; }
+
         public string Address { get; set; }
 
         public DateTime DateObirth { get; set; }
 
-        public ICollection<Mail> Mails { get; set; }
+        public IList<Mail> Mails { get; set; }
     }
 }

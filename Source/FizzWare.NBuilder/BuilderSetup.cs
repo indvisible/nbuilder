@@ -27,6 +27,8 @@ namespace FizzWare.NBuilder
             ResetToDefaults();
         }
 
+        public static Dictionary<Type, string> ClassesChain { get; set; }
+
         public static void ResetToDefaults()
         {
             SetDefaultPropertyNamer(new SequentialPropertyNamer(new ReflectionUtil()));
@@ -37,6 +39,7 @@ namespace FizzWare.NBuilder
             disabledAutoNameProperties = new List<PropertyInfo>();
             DateFromRestriction = null;
             DateToRestriction = null;
+            ClassesChain = new Dictionary<Type, string>();
         }
 
         public static void SetDefaultPropertyNamer(IPropertyNamer propertyNamer)
@@ -88,7 +91,9 @@ namespace FizzWare.NBuilder
         public static bool ShouldIgnoreProperty(PropertyInfo info)
         {
             if (disabledAutoNameProperties.Any(x => x.DeclaringType == info.DeclaringType && x.Name == info.Name))
+            {
                 return true;
+            }
 
             return false;
         }
