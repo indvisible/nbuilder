@@ -533,13 +533,32 @@ namespace Indvisible.DataGen
 
         protected DateTime GetDateTime(MemberInfo memberInfo)
         {
+            var start = new DateTime(1900, 1, 1);
+            var end = DateTime.MaxValue;
             if (BuilderSetup.DateFromRestriction.HasValue)
             {
-                var start = BuilderSetup.DateFromRestriction.Value;
-
-                var range = (int)(DateTime.Today - start).TotalDays;
-                return start.AddDays(_random.Next(range));
+                start = BuilderSetup.DateFromRestriction.Value;
             }
+
+            if (BuilderSetup.DateToRestriction.HasValue)
+            {
+                end = BuilderSetup.DateToRestriction.Value.AddDays(-1);
+            }
+
+            var range = (int)(end - start).TotalDays;
+            if (range < 0)
+            {
+                throw new ArgumentOutOfRangeException(string.Format("Current range value: {0}", range));
+            }
+
+            var value = _random.Next(range);
+            var dateTime = start.AddDays(value);
+            if (dateTime >= BuilderSetup.DateToRestriction)
+            {
+                throw  new ArgumentOutOfRangeException(string.Format("Restriction: {0}, currentValue: {1}", BuilderSetup.DateToRestriction, dateTime));
+            }
+
+            return dateTime;
 
             return DateTime.Now.Date.AddDays(_sequenceNumber - 1);
         }

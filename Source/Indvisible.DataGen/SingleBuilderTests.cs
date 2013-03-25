@@ -11,6 +11,12 @@
     [TestFixture]
     public class SingleBuilderTests
     {
+        [SetUp]
+        public void Setup()
+        {
+            BuilderSetup.DateFromRestriction = null;
+            BuilderSetup.DateToRestriction = null;
+        }
 
         [Test]
         public void CreateWithRealisticNames()
@@ -85,17 +91,17 @@
         public void CreateWithDates()
         {
             var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
-            
+
             Assert.IsNotNull(user);
             Assert.IsNotNull(user.DateBirth);
         }
 
         [Test]
-        public void CreateWithDatesWithFromDateLimit()
+        public void CreateWithDatesWithDateFromRestriction()
         {
             var dateTime = new DateTime(2010, 1, 1);
             BuilderSetup.DateFromRestriction = dateTime;
-            
+
             for (var i = 0; i < 100; i++)
             {
                 var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
@@ -103,6 +109,43 @@
                 Assert.IsNotNull(user);
                 Assert.IsNotNull(user.DateBirth);
                 Assert.IsTrue(user.DateBirth > dateTime);
+            }
+        }
+
+        [Test]
+        public void CreateWithDatesWithDateToRestriction()
+        {
+            var dateTime = new DateTime(2010, 1, 1);
+            BuilderSetup.DateToRestriction = dateTime;
+
+            for (var i = 0; i < 100; i++)
+            {
+                var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
+
+                Assert.IsNotNull(user);
+                Assert.IsNotNull(user.DateBirth);
+                Assert.IsTrue(user.DateBirth < dateTime);
+            }
+        }
+
+        [Test]
+        public void CreateWithDatesRestrictions()
+        {
+            var dateFromRestriction = new DateTime(2000, 1, 1);
+            BuilderSetup.DateFromRestriction = dateFromRestriction;
+
+            var dateToRestriction = new DateTime(2010, 1, 1);
+            BuilderSetup.DateToRestriction = dateToRestriction;
+
+            Assert.True(dateFromRestriction < dateToRestriction, "Incorrect dates");
+
+            for (var i = 0; i < 100; i++)
+            {
+                var user = Builder<Customer>.CreateNew(new RealisticPropertyNamer()).Build();
+
+                Assert.IsNotNull(user);
+                Assert.IsNotNull(user.DateBirth);
+                Assert.IsTrue(user.DateBirth < dateToRestriction);
             }
         }
     }
